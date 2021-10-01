@@ -1,0 +1,6 @@
+ja:
+  activerecord:
+    attributes:
+      post: #これがmodel
+        question_title: 質問
+        answer: 回答
