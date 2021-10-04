@@ -38,6 +38,7 @@ gem 'devise-i18n-views'
 
 gem 'slim-rails'     # mtmt add
 gem 'bootstrap-sass' # mtmt add
+gem 'simple_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
