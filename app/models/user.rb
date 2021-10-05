@@ -12,6 +12,7 @@ class User < ApplicationRecord
   validates :name,     length: { maximum: 10 }, presence: true
 
   has_many :created_events, class_name: 'Event', foreign_key: :user_id
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     if login = conditions.delete(:login)

@@ -1,8 +1,14 @@
 class ApplicationController < ActionController::Base
+
     before_action :authenticate_user!
     before_action :configure_permitted_parameters, if: :devise_controller?
+    after_action  :store_location
 
     protected
+    def after_sign_in_path_for(resource)
+      #session[:previous_url] || events_path
+      events_path
+    end
 
     def configure_permitted_parameters
         # strong parametersを設定し、user_idを許可
@@ -19,5 +25,14 @@ class ApplicationController < ActionController::Base
         devise_parameter_sanitizer.permit(:sign_in){|u|
           u.permit(:user_id, :password, :remember_me)
         }
+    end
+
+    def store_location
+      if (request.fullpath != "/users/sign_in" && \
+          request.fullpath != "/users/sign_up" && \
+          request.fullpath != "/users/edit" && \
+          !request.xhr?)
+        session[:previous_url] = request.fullpath 
+      end
     end
 end
