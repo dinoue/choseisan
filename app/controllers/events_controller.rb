@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[ show edit update destroy ]
+  skip_before_action :authenticate_user!, only: [:show]
+  before_action :set_event, only: %i[ edit update destroy ]
   helper_method :owner?
   
   # GET /events or /events.json
@@ -9,6 +10,8 @@ class EventsController < ApplicationController
 
   # GET /events/1 or /events/1.json
   def show
+    # ログインせずにアクセス可能なため
+    @event = Event.find_by!(hash_id: params[:id])
   end
 
   # GET /events/new
@@ -26,7 +29,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if @event.save
-        format.html { redirect_to @event, notice: "イベントを作成しました。" }
+        format.html { redirect_to event_path(@event.hash_id), notice: "イベントを作成しました。" }
         format.json { render :show, status: :created, location: @event }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -39,7 +42,7 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
-        format.html { redirect_to @event, notice: "イベントを更新しました。" }
+        format.html { redirect_to event_path(@event.hash_id), notice: "イベントの情報を更新しました。" }
         format.json { render :show, status: :ok, location: @event }
       else
         format.html { render :edit, status: :unprocessable_entity }
