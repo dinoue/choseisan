@@ -30,5 +30,7 @@ module Mycho
 
     # Please use `Rails.root.join('path/to')` instead.と言われたら、下記のようにする。
     config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.{rb,yml}').to_s]
+
+    config.autoload_paths += %W( #{config.root}/app/services )
   end
 end
