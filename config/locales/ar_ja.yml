@@ -6,7 +6,7 @@ ja:
       event_entry: イベントエントリー
     attributes:
       user:
-        user_id: ログインID
+        login_id: ログインID
         password: パスワード
         current_password: 現在のパスワード
         name: 名前
