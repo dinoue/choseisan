@@ -49,6 +49,8 @@ GEM
     activerecord (6.1.4.1)
       activemodel (= 6.1.4.1)
       activesupport (= 6.1.4.1)
+    activerecord-import (1.2.0)
+      activerecord (>= 3.2)
     activestorage (6.1.4.1)
       actionpack (= 6.1.4.1)
       activejob (= 6.1.4.1)
@@ -286,6 +288,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_decorator
+  activerecord-import
   better_errors
   binding_of_caller
   bootsnap (>= 1.4.4)
