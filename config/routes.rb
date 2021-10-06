@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'entries/create'
+  get 'entries/update'
+  get 'entries/destroy'
   resources :events
   devise_for :views
   devise_for :users
