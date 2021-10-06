@@ -1,0 +1,2 @@
+class EventOption < ApplicationRecord
+end
