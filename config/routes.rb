@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'top', to: 'home#top', as: :top
   resources :events do
     resource :entry, controller: :event_entry, only: [:create, :update, :destroy]
   end
