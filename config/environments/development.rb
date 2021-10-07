@@ -76,4 +76,13 @@ Rails.application.configure do
 
   # devise mailer
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+  # mtmt add
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+    Bullet.rails_logger = true
+    Bullet.add_footer = true
+    Bullet.add_whitelist type: :unused_eager_loading, class_name: 'Event', association: :event_entries
+  end
 end

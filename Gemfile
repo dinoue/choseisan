@@ -65,6 +65,7 @@ group :development do
   gem 'pry-stack_explorer' # mtmt add
   gem 'better_errors'      # mtmt add
   gem 'binding_of_caller'  # mtmt add
+  gem 'bullet'             # mtmt add
 end
 
 group :test do
