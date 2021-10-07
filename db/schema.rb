@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_07_203903) do
+ActiveRecord::Schema.define(version: 2021_10_07_192400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,12 +50,24 @@ ActiveRecord::Schema.define(version: 2021_10_07_203903) do
     t.index ["option_id"], name: "index_option_entries_on_option_id"
   end
 
+  create_table "option_entries", force: :cascade do |t|
+    t.integer  "feeling",        limit: 4, default: 0, null: false
+    t.integer  "option_id",      limit: 4,             null: false
+    t.integer  "event_entry_id", limit: 4,             null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+  end
+
+  add_index "option_entries", ["event_entry_id", "option_id"], name: "index_option_entries_on_event_entry_id_and_option_id", unique: true, using: :btree
+  add_index "option_entries", ["event_entry_id"], name: "index_option_entries_on_event_entry_id", using: :btree
+  add_index "option_entries", ["option_id", "event_entry_id"], name: "index_option_entries_on_option_id_and_event_entry_id", unique: true, using: :btree
+  add_index "option_entries", ["option_id"], name: "index_option_entries_on_option_id", using: :btree
+
   create_table "options", force: :cascade do |t|
     t.string "text", null: false
     t.bigint "event_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "status", default: 0, null: false
     t.index ["event_id"], name: "index_options_on_event_id"
   end
 
