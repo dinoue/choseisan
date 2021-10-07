@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :events do
-    resource :entry, only: [:create, :update, :destroy]
+    resource :entry, controller: :event_entry, only: [:create, :update, :destroy]
   end
   devise_for :views
   devise_for :users
