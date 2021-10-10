@@ -35,9 +35,9 @@ gem 'rails-i18n'
 gem 'devise'
 gem 'devise-i18n'
 gem 'devise-i18n-views'
+gem 'spectre_scss'
 
 gem 'slim-rails'       # mtmt add
-gem 'bootstrap-sass'   # mtmt add
 gem 'simple_form'      # mtmt add
 gem 'active_decorator' # mtmt add
 gem 'kaminari'           # mtmt add
