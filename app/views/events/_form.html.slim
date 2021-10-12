@@ -2,21 +2,27 @@
 - ph_memo = "（200文字以内・任意）&#13;&#10;飲み会の日程調整しましょう！&#13;&#10;出欠〆切は25日です！".html_safe
 
 = simple_form_for(@event) do |f|
-  = f.error_notification
-  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
-
-  .form-inputs
-    = f.input :title, maxlength: 50, required: false, input_html: { placeholder: ph_title } 
-    = f.input :memo, input_html: { rows: 4, placeholder: ph_memo }
-    - if @event.new_record?
-      == render 'form_new', f: f
-    - else
-      == render 'form_edit', f: f
-  .form-actions
-    = f.button :submit, class: "btn btn-primary btn-lg"
-    span &emsp;
-    - if @event.new_record?
-      = link_to "キャンセル", events_path, class: "btn btn-default btn-lg"
-    - else
-      = link_to "キャンセル", event_path(@event.hash_id), class: "btn btn-default btn-lg"
-
+  .toast
+    = f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+  .panel
+    .panel-header イベント作成
+    .panel-body
+      .form-group
+        = f.label :title, class: "form-label"
+        = f.text_field :title, maxlength: 50, required: false, placeholder: ph_title, class: "form-input"
+      .form-group
+        = f.label :memo, class: "form-label"
+        = f.text_field :memo, rows: "4", placeholder: ph_memo, class:"form-input"
+      .form-group
+        - if @event.new_record?
+          == render 'form_new', f: f
+        - else
+          == render 'form_edit', f: f
+      .form-actions
+        = f.submit "登録", class: "btn btn-primary"
+        span &emsp;
+        - if @event.new_record?
+          = link_to "キャンセル", events_path, class: "btn btn-secondary"
+        - else
+          = link_to "キャンセル", event_path(@event.hash_id), class: "btn btn-secondary"
+      .m-2
