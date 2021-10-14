@@ -28,13 +28,17 @@ html
                 - else
                   = link_to "ログイン", new_user_session_path, class:"btn btn-link"
                   = link_to "サインアップ", new_user_registration_path, class:"btn btn-link"
-      .m-2
-      - if notice
-        .toast.toast-success
-          = notice
-      - if alert
-        .toast.toast-error
-          = alert
-      = devise_error_messages!
-      == yield
+          .m-2
+          - if notice
+            .toast.toast-success
+              = notice
+          - if alert
+            .toast.toast-error
+              = alert
+          = devise_error_messages!
+          .m-2
+      section.section.blog-listing id="body-wrapper"
+        section.container.grid-lg
+          .container
+            == yield
 
