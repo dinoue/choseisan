@@ -1,22 +1,19 @@
-section.section.blog-listing id="body-wrapper"
-  section.container.grid-lg
-    .container
-      h3.s-title イベント一覧
-      .m-2
-      .columns
-        .column.col-12
-          - @events.each do |event|
-              .tile.bg-secondary
-                .tile-icon
-                  i.icon.icon-2x.bg-primary.icon-time
-                .tile-content
-                  p.tile-title
-                    = link_to event.title, event_path(event.hash_id)
-                  p.tile-subtitle
-                    = event.memo.truncate(43)
-              .m-2
-          = paginate @events
-      .columns 
-        .column.col-12
-          = link_to "出欠表をつくる", new_event_path, class: "btn btn-primary btn-lg btn-block"
+h3.s-title イベント一覧
+.m-2
+.columns
+  .column.col-12
+    - @events.each do |event|
+        .tile.bg-secondary
+          .tile-icon
+            i.icon.icon-2x.bg-primary.icon-time
+          .tile-content
+            .tile-title
+              = link_to event.title, event_path(event.hash_id)
+            .tile-subtitle
+              = event.memo.truncate(43)
+        .m-2
+    = paginate @events
+.columns 
+  .column.col-12
+    = link_to "イベントを登録する", new_event_path, class: "btn btn-primary btn-lg btn-block"
 

@@ -1,83 +1,82 @@
 - title_entry = @event.entered? ? "出欠を変更する" : "出欠を入力する"
 
-section.section.blog-listing id="body-wrapper"
-  section.container.grid-lg
-    .container
-      h3.s-title #{@event.title}
-      span.label.label-primary 作成者：&nbsp;#{@event.owner.name}
+h3.s-title #{@event.title}
+span.label.label-primary 作成者：&nbsp;#{@event.owner.name}
+span &emsp;
+span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
+.m-2
+.panel
+  .panel-header メモ
+  .panel-body #{@event.memo}
+  .m-2
+.m-2
+.panel
+  .panel-header 日にち候補
+  .panel-body
+    table.table.table-striped.table-hover
+      tr.bg-warning
+        th.text-center width="15%" 日程
+        th.text-center width="5%" ○
+        th.text-center width="5%" △
+        th.text-center width="5%" ✕
+        - @event.event_entries.includes(:user).order(:id).each do |event_entry|
+          th.text-center = event_entry.user.name
+      - @event.options.each do |option|
+        - option.calc_option_entry
+        - if option.rate == 100
+          - line_color = "#68D973"
+        - elsif option.rate == 0
+          - line_color = "#ffffff"
+        - else
+          - line_color = "#D5EBD7"
+        tr bgcolor="#{line_color}"
+          td = option.text
+          td.text-center = option.count_ok
+          td.text-center = option.count_neither
+          td.text-center = option.count_ng
+          - @event.event_entries.order(:id).each do |event_entry|
+            - option_entry = OptionEntry.find_by(option: option, event_entry: event_entry)
+            - if option_entry.blank?
+              td
+            - else
+              td.text-center style="font-size: 1.5em; font-style: bold"
+                - if option_entry.NG?
+                  .label.label-danger &nbsp; ✕ &nbsp;
+                - elsif option_entry.Neither?
+                  .label.label-warning &nbsp; △ &nbsp;
+                - elsif option_entry.OK?
+                  .label.label-success &nbsp; ○ &nbsp;
+      tr
+        th.warning colspan="4" コメント
+        - @event.event_entries.order(:id).each do |event_entry|
+          td = event_entry.comment
+    .m-2
+    / この画面はログインせずにアクセス可能
+    - if user_signed_in?
+      button.btn.btn-primary onclick="javascript:openModal('attend')" type="button"
+        | #{title_entry}
+    - else
+      = button_to title_entry, event_entry_path(@event), { method: :post }, class: "btn btn-primary input-group-btn"
+    .m-2
+.m-2
+.panel
+  .panel-header このイベントのURL
+  .panel-body
+    = text_field_tag "event-url", "#{request.url}", readonly: true, onclick: "this.select();", class: "form-input disabled"
+  .panel-footer
+  .m-2
+- if @event.owner?
+  .m-2
+  .panel
+    .panel-header イベント情報の変更
+    .panel-body
+      = link_to "イベントの編集", edit_event_path(@event), class: "btn btn-success"
       span &emsp;
-      span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
-      .m-2
-      .panel
-        .panel-header メモ
-        .panel-body #{@event.memo}
-        .m-2
-      .m-2
-      .panel
-        .panel-header 日にち候補
-        .panel-body
-          table.table.table-striped.table-hover
-            tr.bg-warning
-              th.text-center width="15%" 日程
-              th.text-center width="5%" ◯
-              th.text-center width="5%" △
-              th.text-center width="5%" Ｘ
-              - @event.event_entries.includes(:user).order(:id).each do |event_entry|
-                th.text-center = event_entry.user.name
-            - @event.options.each do |option|
-              - option.calc_option_entry
-              - if option.rate == 100
-                - line_color = "#68D973"
-              - elsif option.rate == 0
-                - line_color = "#ffffff"
-              - else
-                - line_color = "#D5EBD7"
-              tr bgcolor="#{line_color}"
-                td = option.text
-                td.text-center = option.count_ok
-                td.text-center = option.count_neither
-                td.text-center = option.count_ng
-                - @event.event_entries.order(:id).each do |event_entry|
-                  - option_entry = OptionEntry.find_by(option: option, event_entry: event_entry)
-                  - if option_entry.blank?
-                    td
-                  - else
-                    td.text-center style="font-size: 1.5em;"
-                      - if option_entry.NG?
-                        .label.label-danger &nbsp; Ｘ &nbsp;
-                      - elsif option_entry.Neither?
-                        .label.label-warning &nbsp; △ &nbsp;
-                      - elsif option_entry.OK?
-                        .label.label-success &nbsp; ◯ &nbsp;
-            tr
-              th.warning colspan="4" コメント
-              - @event.event_entries.order(:id).each do |event_entry|
-                td = event_entry.comment
-          .m-2
-          / この画面はログインせずにアクセス可能
-          - if user_signed_in?
-            button.btn.btn-primary onclick="javascript:openModal('attend')" type="button"
-              | #{title_entry}
-          - else
-            = button_to title_entry, event_entry_path(@event), { method: :post }, class: "btn btn-primary input-group-btn"
-          .m-2
-      .m-2
-      .panel
-        .panel-header このイベントのURL
-        .panel-body
-          = text_field_tag "event-url", "#{request.url}", readonly: true, onclick: "this.select();", class: "form-input disabled"
-        .m-2
-      - if @event.owner?
-        .m-2
-        .panel
-          .panel-header イベント情報の変更
-          .panel-body
-            = link_to "イベントの編集", edit_event_path(@event), class: "btn btn-success"
-            span &emsp;
-            = link_to "イベントの削除", event_path(@event), method: :delete,
-              data: { confirm: "削除してもよろしいですか？", toggle: "popover", trigger: "hover", placement: "top", title: "注意！", content: "一度削除すると復旧はできません。" },
-              id: "btn-event-delete", class: "btn btn-error"
-          .m-2
+      = link_to "イベントの削除", event_path(@event), method: :delete,
+        data: { confirm: "削除してもよろしいですか？", toggle: "popover", trigger: "hover", placement: "top", title: "注意！", content: "一度削除すると復旧はできません。" },
+        id: "btn-event-delete", class: "btn btn-error"
+    .panel-footer
+    .m-2
 
 #attend.modal.modal-sm
   .modal-container 
