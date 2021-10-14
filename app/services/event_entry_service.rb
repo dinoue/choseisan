@@ -15,9 +15,9 @@ class EventEntryService
       params[:feelings].each do |_, attrs|
         option_entry = event_entry.option_entries.build
         option_entry.option_id = attrs[:option_id]
-        option_entry[:feeling] = attrs[:feeling]
+        option_entry.feeling = attrs[:feeling].to_i
         if option_entry.invalid?
-          event_entry.errors[:base] << "回答の選択が不正です。"
+          event_entry.errors.add :base, "回答の選択が不正です。"
           status = false
           raise ActiveRecord::Rollback
         end
@@ -48,7 +48,7 @@ class EventEntryService
         end
         option_entry[:feeling] = attrs[:feeling]
         if option_entry.invalid?
-          event_entry.errors[:base] << "回答の選択が不正です。"
+          event_entry.errors.add :base, "回答の選択が不正です。"
           status = false
           raise ActiveRecord::Rollback
         end
