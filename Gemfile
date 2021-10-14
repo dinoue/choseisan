@@ -66,6 +66,8 @@ group :development do
   gem 'better_errors'      # mtmt add
   gem 'binding_of_caller'  # mtmt add
   gem 'bullet'             # mtmt add
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 group :test do

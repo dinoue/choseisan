@@ -81,14 +81,14 @@ section.section.blog-listing id="body-wrapper"
 
 #attend.modal.modal-sm
   .modal-container 
-    = form_for(@event_entry, url: event_entry_path(@event), remote: true) do |f|
+    = simple_form_for(@event_entry, url: event_entry_path(@event), remote: true) do |f|
       .modal-header
         button.btn.btn-clear.float-right onclick="javascript:closeModal('attend')" type="button" aira-label="閉じる"
         .modal-title.h5
           | #{title_entry}
       .modal-body
         .content
-          / #modal-dialog-errors
+          #modal-dialog-errors
           p 日にち候補
           table.table.table-striped
             - @option_entries.each do |option_entry|
@@ -100,15 +100,15 @@ section.section.blog-listing id="body-wrapper"
                 td.warning width="30%" = option_entry.option.text
                 td
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][option_id]" value = OptionEntry.feelings[:NG] checked = radio_options_ng)
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:NG] checked = radio_options_ng )
                     i.form-icon
                     | ✕ 
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][option_id]" value = OptionEntry.feelings[:Neither] checked = radio_options_neither)
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:Neither] checked = radio_options_neither )
                     i.form-icon
                     | △ 
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][option_id]" value = OptionEntry.feelings[:OK] checked = radio_options_ok)
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:OK] checked = radio_options_ok )
                     i.form-icon
                     | ○ 
           .form-group

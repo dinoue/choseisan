@@ -94,6 +94,9 @@ GEM
     coderay (1.1.3)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
+    debase (0.2.4.1)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.12)
     debug_inspector (1.1.0)
     devise (4.8.0)
       bcrypt (~> 3.0)
@@ -213,6 +216,8 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
+    ruby-debug-ide (0.7.3)
+      rake (>= 0.8.1)
     ruby-graphviz (1.2.5)
       rexml
     rubyzip (2.3.2)
@@ -294,6 +299,7 @@ DEPENDENCIES
   bullet
   byebug
   capybara (>= 3.26)
+  debase
   devise
   devise-i18n
   devise-i18n-views
@@ -311,6 +317,7 @@ DEPENDENCIES
   rails (~> 6.1.4, >= 6.1.4.1)
   rails-erd
   rails-i18n
+  ruby-debug-ide
   sass-rails (>= 6)
   selenium-webdriver
   simple_form
