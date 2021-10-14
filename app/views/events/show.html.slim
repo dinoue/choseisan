@@ -41,7 +41,7 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
             - else
               td.text-center style="font-size: 1.5em; font-style: bold"
                 - if option_entry.NG?
-                  .label.label-danger &nbsp; i.far.triangle &nbsp;
+                  .label.label-danger &nbsp; ✕ &nbsp;
                 - elsif option_entry.Neither?
                   .label.label-warning &nbsp; △ &nbsp;
                 - elsif option_entry.OK?
