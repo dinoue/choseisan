@@ -245,7 +245,6 @@ GEM
       actionpack (>= 3.1)
       railties (>= 3.1)
       slim (>= 3.0, < 5.0)
-    spectre_scss (0.5.9.0)
     spring (3.0.0)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
@@ -322,7 +321,6 @@ DEPENDENCIES
   selenium-webdriver
   simple_form
   slim-rails
-  spectre_scss
   spring
   turbolinks (~> 5)
   tzinfo-data

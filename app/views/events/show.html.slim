@@ -16,9 +16,9 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
     table.table.table-striped.table-hover
       tr.bg-warning
         th.text-center width="15%" 日程
-        th.text-center width="5%" ◯
+        th.text-center width="5%" ○
         th.text-center width="5%" △
-        th.text-center width="5%" Ｘ
+        th.text-center width="5%" ✕
         - @event.event_entries.includes(:user).order(:id).each do |event_entry|
           th.text-center = event_entry.user.name
       - @event.options.each do |option|
@@ -39,13 +39,13 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
             - if option_entry.blank?
               td
             - else
-              td.text-center style="font-size: 1.5em;"
+              td.text-center style="font-size: 1.5em; font-style: bold"
                 - if option_entry.NG?
-                  .label.label-danger &nbsp; Ｘ &nbsp;
+                  .label.label-danger &nbsp; i.far.triangle &nbsp;
                 - elsif option_entry.Neither?
                   .label.label-warning &nbsp; △ &nbsp;
                 - elsif option_entry.OK?
-                  .label.label-success &nbsp; ◯ &nbsp;
+                  .label.label-success &nbsp; ○ &nbsp;
       tr
         th.warning colspan="4" コメント
         - @event.event_entries.order(:id).each do |event_entry|
