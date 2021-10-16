@@ -1,20 +1,22 @@
 class Option < ApplicationRecord
+  enum feeling: {NG: 0, Neither: 1, OK: 2 }
   validates :text, length: { maximum: 2000 }, presence: true
 
   belongs_to :event
   has_many :option_entries, foreign_key: :option_id, dependent: :destroy
 
-  attr_accessor :count_ng, :count_neither, :count_ok, :rate
+  attr_accessor :answer_counts, :rate, 
 
   def calc_option_entry
+    self.answer_counts = {}
     feeling_counts = OptionEntry.feeling_groups(self.id)
-    self.count_ng      = feeling_counts[0] || 0
-    self.count_neither = feeling_counts[1] || 0
-    self.count_ok      = feeling_counts[2] || 0
+    self.answer_counts[:NG] = feeling_counts['NG'] || 0
+    self.answer_counts[:Neither] = feeling_counts['Neither'] || 0
+    self.answer_counts[:OK] = feeling_counts['OK'] || 0
     sum = 0
-    sum += self.count_ok * 100
-    sum += self.count_neither * 50
-    all_count = self.count_ng + self.count_neither + self.count_ok
+    sum += self.answer_counts[:OK]* 100
+    sum += self.answer_counts[:Neither] * 50
+    all_count = self.answer_counts.values.inject(:+)
     self.rate = (all_count == 0) ? 0 : sum / all_count
   end
 end

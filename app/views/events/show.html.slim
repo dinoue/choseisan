@@ -31,9 +31,9 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
           - line_color = "#D5EBD7"
         tr bgcolor="#{line_color}"
           td = option.text
-          td.text-center = option.count_ok
-          td.text-center = option.count_neither
-          td.text-center = option.count_ng
+          td.text-center = option.answer_counts[:OK]
+          td.text-center = option.answer_counts[:Neither]
+          td.text-center = option.answer_counts[:NG]
           - @event.event_entries.order(:id).each do |event_entry|
             - option_entry = OptionEntry.find_by(option: option, event_entry: event_entry)
             - if option_entry.blank?
