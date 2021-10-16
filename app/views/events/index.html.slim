@@ -7,9 +7,9 @@ h3.s-title イベント一覧
           .tile-icon
             i.icon.icon-2x.bg-primary.icon-time
           .tile-content
-            .tile-title
+            h5.tile-title
               = link_to event.title, event_path(event.hash_id)
-            .tile-subtitle
+            p.tile-subtitle
               = event.memo.truncate(43)
         .m-2
     = paginate @events
