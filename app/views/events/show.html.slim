@@ -19,7 +19,7 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
         th.text-center width="5%" ○
         th.text-center width="5%" △
         th.text-center width="5%" ✕
-        - @event.event_entries.includes(:user).order(:id).each do |event_entry|
+        - @event.event_entries.each do |event_entry|
           th.text-center = event_entry.user.name
       - @event.options.each do |option|
         - option.calc_option_entry
@@ -28,8 +28,8 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
           td.text-center = option.answer_counts[:OK]
           td.text-center = option.answer_counts[:Neither]
           td.text-center = option.answer_counts[:NG]
-          - @event.event_entries.order(:id).each do |event_entry|
-            - option_entry = OptionEntry.find_by(option: option, event_entry: event_entry)
+          - @event.event_entries.each do |event_entry|
+            - option_entry = event_entry.option_entries.find_by(option: option)
             - if option_entry.blank?
               td
             - else
@@ -42,7 +42,7 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
                   .label.label-success &nbsp; ○ &nbsp;
       tr
         th.warning colspan="4" コメント
-        - @event.event_entries.order(:id).each do |event_entry|
+        - @event.event_entries.each do |event_entry|
           td = event_entry.comment
     .m-2
     / この画面はログインせずにアクセス可能
