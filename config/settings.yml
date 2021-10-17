@@ -1,0 +1,3 @@
+max_count:
+  events: 100
+paginate_count: 5

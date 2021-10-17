@@ -1,0 +1,128 @@
+- title_entry = @event.entered? ? "出欠を変更する" : "出欠を入力する"
+
+h3.s-title #{@event.title}
+span.label.label-primary 作成者：&nbsp;#{@event.owner.name}
+span &emsp;
+span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
+.m-2
+.panel
+  .panel-header メモ
+  .panel-body #{@event.memo}
+  .m-2
+.m-2
+.panel
+  .panel-header 日にち候補
+  .panel-body
+    table.table.table-striped.table-hover
+      tr.bg-warning
+        th.text-center width="15%" 日程
+        th.text-center width="5%" ○
+        th.text-center width="5%" △
+        th.text-center width="5%" ✕
+        - @event.event_entries.each do |event_entry|
+          th.text-center = event_entry.user.name
+      - @event.options.each do |option|
+        - option.calc_option_entry
+        tr bgcolor="#D5EBD7"
+          td = option.text
+          td.text-center = option.answer_counts[:OK]
+          td.text-center = option.answer_counts[:Neither]
+          td.text-center = option.answer_counts[:NG]
+          - @event.event_entries.each do |event_entry|
+            - option_entry = nil
+            - event_entry.option_entries.each do |target_option_entry|
+              - option_entry = target_option_entry if target_option_entry.option == option
+            - if option_entry.nil?
+              td
+            - else
+              td.text-center style="font-size: 1.5em; font-style: bold"
+                - if option_entry.NG?
+                  .label.label-danger &nbsp; ✕ &nbsp;
+                - elsif option_entry.Neither?
+                  .label.label-warning &nbsp; △ &nbsp;
+                - elsif option_entry.OK?
+                  .label.label-success &nbsp; ○ &nbsp;
+      tr
+        th.warning colspan="4" コメント
+        - @event.event_entries.each do |event_entry|
+          td = event_entry.comment
+    .m-2
+    / この画面はログインせずにアクセス可能
+    - if user_signed_in?
+      button.btn.btn-primary onclick="javascript:openModal('attend')" type="button"
+        | #{title_entry}
+    - else
+      = button_to title_entry, event_entry_path(@event), { method: :post , class: "btn btn-primary input-group-btn"}
+    .m-2
+.m-2
+.panel
+  .panel-header このイベントのURL
+  .panel-body
+    = text_field_tag "event-url", "#{request.url}", readonly: true, onclick: "this.select();", class: "form-input disabled"
+  .panel-footer
+  .m-2
+- if @event.owner?
+  .m-2
+  .panel
+    .panel-header イベント情報の変更
+    .panel-body
+      = link_to "イベントの編集", edit_event_path(@event), class: "btn btn-success"
+      span &emsp;
+      = link_to "イベントの削除", event_path(@event), method: :delete,
+        data: { confirm: "削除してもよろしいですか？", toggle: "popover", trigger: "hover", placement: "top", title: "注意！", content: "一度削除すると復旧はできません。" },
+        id: "btn-event-delete", class: "btn btn-error"
+    .panel-footer
+    .m-2
+
+#attend.modal.modal-sm
+  .modal-container 
+    = simple_form_for(@event_entry, url: event_entry_path(@event), remote: true) do |f|
+      .modal-header
+        button.btn.btn-clear.float-right onclick="javascript:closeModal('attend')" type="button" aira-label="閉じる"
+        .modal-title.h5
+          | #{title_entry}
+      .modal-body
+        .content
+          #modal-dialog-errors
+          p 日にち候補
+          table.table.table-bordered.table-striped
+            - @option_entries_selection.each do |option_entry|
+              - radio_options_ng      = option_entry.NG?      ? { checked: true } : nil
+              - radio_options_neither = option_entry.Neither? ? { checked: true } : nil
+              - radio_options_ok      = option_entry.OK?      ? { checked: true } : nil
+              = hidden_field_tag "event_entry[feelings][#{option_entry.id}][option_id]", option_entry.option_id
+              tr
+                td.warning width="30%" = option_entry.option.text
+                td
+                  label.form-radio.form-inline
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:NG] checked = radio_options_ng )
+                    i.form-icon
+                    | ✕ 
+                  label.form-radio.form-inline
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:Neither] checked = radio_options_neither )
+                    i.form-icon
+                    | △ 
+                  label.form-radio.form-inline
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:OK] checked = radio_options_ok )
+                    i.form-icon
+                    | ○ 
+          .form-group
+            = f.label :comment , class: "form-label"
+            = f.text_field :comment, maxlength: 50, class: "form-input"
+      .modal-footer
+        = f.submit "保存", class: "btn btn-primary", data: { disable_with: "送信中..." }
+        button.btn.btn-secondary onclick="javascript:closeModal('attend')" type="button"
+          | キャンセル
+        - if @event_entry.persisted?
+          span &emsp; &emsp;
+          = link_to "出欠の削除", event_entry_path(@event), method: :delete, remote: true,
+            class: "btn btn-danger", data: { confirm: "削除してもよろしいですか？", disable_with: "送信中..." }
+
+javascript:
+    function openModal(id) {
+      document.getElementById(id).classList.add("active")
+    }
+    function closeModal(id) {
+      console.log(id);
+      document.getElementById(id).classList.remove("active")
+    }

@@ -1,0 +1,45 @@
+doctype html
+html
+  head
+    title 参確さん
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1.0"
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    link rel='stylesheet' type='text/css' href='https://unpkg.com/spectre.css/dist/spectre.min.css'
+    link rel='stylesheet' type='text/css' href='https://unpkg.com/spectre.css/dist/spectre-exp.min.css'
+    link rel='stylesheet' type='text/css' href='https://unpkg.com/spectre.css/dist/spectre-icons.min.css'
+    = javascript_pack_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  
+  body.header-dark.header-fixed.header-animated.sticky-footer id="top"
+    . id="page-wrapper"
+      section.section id="header"
+        section.container.grid-lg
+          header.navbar.bg-primary.text-light
+            section.navbar-section
+              .m-2
+              i.icon.bg-primary.icon-check
+              .m-1
+              a.navbar-brand.btn-link.text-light.mr-10 href="#{top_path}" 参確さん
+            section.navbar-section
+              nav.dropmenu.animated
+                - if user_signed_in?
+                  = link_to "#{current_user.name} さん", edit_user_registration_path, class:"btn btn-link btn-light text-gray"
+                  = link_to "ログアウト", destroy_user_session_path, method: :delete, class:"btn btn-link btn-light text-gray"
+                - else
+                  = link_to "ログイン", new_user_session_path, class:"btn btn-link btn-light text-gray"
+                  = link_to "サインアップ", new_user_registration_path, class:"btn btn-link btn-light text-gray"
+          .m-2
+          - if notice
+            .toast.toast-success
+              = notice
+          - if alert
+            .toast.toast-error
+              = alert
+          = devise_error_messages!
+          .m-2
+      section.section.blog-listing id="body-wrapper"
+        section.container.grid-lg
+          .container
+            == yield
+

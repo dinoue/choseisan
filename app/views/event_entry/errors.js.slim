@@ -1,0 +1,6 @@
+| messages = $("<div></div>").addClass("toast").addClass("toast-error");
+- @event_entry.errors.full_messages.each do |message|
+  | line = $("<p></p>").text("#{message}");
+  | messages.append(line);
+| $("#modal-dialog-errors").html(messages);
+

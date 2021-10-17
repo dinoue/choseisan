@@ -1,0 +1,25 @@
+h3.s-title イベント一覧
+.m-2
+.columns
+  .column.col-12
+    - @events.each do |event|
+        .tile.bg-secondary
+          .tile-icon
+            i.icon.icon-2x.bg-primary.icon-time
+          .tile-content
+            h5.tile-title
+              = link_to event.title, event_path(event.hash_id)
+            p.tile-subtitle
+              = event.memo.truncate(43)
+        .m-2
+    = paginate @events
+.columns 
+  .column.col-12
+    - if current_user.created_events.count < Settings.max_count.events
+      = link_to "イベントを登録する", new_event_path, id: "btn-event-create", class: "btn btn-primary btn-lg btn-block",
+        data: { toggle: "popover", trigger: "hover", placement: "top", content: "最大#{Settings.max_count.events}個まで" }
+
+javascript:
+    function() {
+      return $("#btn-event-create").popover();
+    }
