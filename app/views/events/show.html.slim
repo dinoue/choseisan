@@ -50,7 +50,7 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
       button.btn.btn-primary onclick="javascript:openModal('attend')" type="button"
         | #{title_entry}
     - else
-      = button_to title_entry, event_entry_path(@event), { method: :post }, class: "btn btn-primary input-group-btn"
+      = button_to title_entry, event_entry_path(@event), { method: :post , class: "btn btn-primary input-group-btn"}
     .m-2
 .m-2
 .panel

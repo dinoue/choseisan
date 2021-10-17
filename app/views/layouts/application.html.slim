@@ -15,19 +15,20 @@ html
     div id="page-wrapper"
       section.section id="header"
         section.container.grid-lg
-          header.navbar
-            section.navbar-section.logo
+          header.navbar.bg-primary.text-light
+            section.navbar-section
+              .m-2
               i.icon.bg-primary.icon-check
               .m-1
-              = link_to "参確さん", top_path, class: "navbar-brand mr-10"              
-            section.navbar-section.desktop-menu
+              a.navbar-brand.btn-link.text-light.mr-10 href="#{top_path}" 参確さん
+            section.navbar-section
               nav.dropmenu.animated
                 - if user_signed_in?
-                  = link_to "#{current_user.name} さん", edit_user_registration_path, class:"btn btn-link"
-                  = link_to "ログアウト", destroy_user_session_path, method: :delete, class:"btn btn-link"
+                  = link_to "#{current_user.name} さん", edit_user_registration_path, class:"btn btn-link btn-light text-gray"
+                  = link_to "ログアウト", destroy_user_session_path, method: :delete, class:"btn btn-link btn-light text-gray"
                 - else
-                  = link_to "ログイン", new_user_session_path, class:"btn btn-link"
-                  = link_to "サインアップ", new_user_registration_path, class:"btn btn-link"
+                  = link_to "ログイン", new_user_session_path, class:"btn btn-link btn-light text-gray"
+                  = link_to "サインアップ", new_user_registration_path, class:"btn btn-link btn-light text-gray"
           .m-2
           - if notice
             .toast.toast-success
