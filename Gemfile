@@ -42,6 +42,7 @@ gem 'active_decorator' # mtmt add
 gem 'kaminari'           # mtmt add
 gem 'kaminari-bootstrap' # mtmt add
 gem 'activerecord-import' # mtmt add
+gem 'config'              # mtmt add
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
