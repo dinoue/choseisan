@@ -15,5 +15,11 @@ h3.s-title イベント一覧
     = paginate @events
 .columns 
   .column.col-12
-    = link_to "イベントを登録する", new_event_path, class: "btn btn-primary btn-lg btn-block"
+    - if current_user.created_events.count < Settings.max_count.events
+      = link_to "イベントを登録する", new_event_path, id: "btn-event-create", class: "btn btn-primary btn-lg btn-block",
+        data: { toggle: "popover", trigger: "hover", placement: "top", content: "最大#{Settings.max_count.events}個まで" }
 
+javascript:
+    function() {
+      return $("#btn-event-create").popover();
+    }
