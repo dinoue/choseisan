@@ -6,13 +6,12 @@
   value_method: :id,
   label_method: :text,
   input_html: {class: "form-checkbox form-inline"}
-div style="padding-left: 1em;"
+.style="padding-left: 1em;"
   = f.input :options_text, as: :text,
     label: "これらの末尾に以下の日程を追加する",
     required: false,
     label_html: { style: "font-weight: normal; font-size: 90%;" },
     input_html: { rows: 5, placeholder: ph_options_text }
-
 
 javascript:
   $(function() {
