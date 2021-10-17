@@ -23,13 +23,7 @@ span.label.label-success 回答数：&nbsp;#{@event.event_entries.count}
           th.text-center = event_entry.user.name
       - @event.options.each do |option|
         - option.calc_option_entry
-        - if option.rate == 100
-          - line_color = "#68D973"
-        - elsif option.rate == 0
-          - line_color = "#ffffff"
-        - else
-          - line_color = "#D5EBD7"
-        tr bgcolor="#{line_color}"
+        tr bgcolor="#D5EBD7"
           td = option.text
           td.text-center = option.answer_counts[:OK]
           td.text-center = option.answer_counts[:Neither]
