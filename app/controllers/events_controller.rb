@@ -38,7 +38,7 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    if EventService.bulk_delete(@event)
+    if @event.destroy
       redirect_to events_path, notice: 'イベントを削除しました。'
     else
       render :show
