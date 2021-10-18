@@ -16,7 +16,7 @@ class Event < ApplicationRecord
   scope :filter_events, ->(user) {
       # 自分が作成したイベントと自分が回答したイベント
     condition = Event.arel_table[:user_id].eq(user.id).or(EventEntry.arel_table[:user_id].eq(user.id))
-    eager_load(:event_entries).where(condition)
+    where(condition)
   }
 
   private

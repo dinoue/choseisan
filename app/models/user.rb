@@ -23,4 +23,7 @@ class User < ApplicationRecord
     end
   end
 
+  def related_events
+    Event.where(Event.arel_table[:user_id].eq(self.id).or(EventEntry.arel_table[:user_id].eq(self.id)))
+  end
 end
