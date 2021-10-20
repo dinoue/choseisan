@@ -71,6 +71,7 @@ SimpleForm.setup do |config|
   # Defaults to :nested for bootstrap config.
   #   inline: input + label
   #   nested: label > input
+  config.boolean_style = :nested
   config.boolean_style = :inline
 
   # Default class for buttons
@@ -115,7 +116,7 @@ SimpleForm.setup do |config|
 
   # You can define the class to use on all labels. Default is nil.
   # config.label_class = nil
-  config.label_class = 'form-label'
+  config.label_class = nil
 
   # You can define the default class to be used on forms. Can be overriden
   # with `html: { :class }`. Defaulting to none.
@@ -166,7 +167,7 @@ SimpleForm.setup do |config|
   # config.input_class = nil
 
   # Define the default class of the input wrapper of the boolean input.
-  config.boolean_label_class = 'checkbox form-checkbox'
+  config.boolean_label_class = 'form-checkbox'
 
   # Defines if the default input wrapper class should be included in radio
   # collection wrappers.

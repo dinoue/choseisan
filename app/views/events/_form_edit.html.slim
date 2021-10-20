@@ -7,9 +7,13 @@
   label: title_options,
   collection: @event.options,
   value_method: :id,
-  label_method: :text,
-  item_wrapper_class: "form-checkbox",
-  item_label_class: "form-label form-inline"
+  label_method: lambda { |option| "#{option.text}".html_safe } ,
+  input_class: nil,
+  input_html: {class: ""},
+  item_label_tag: :div ,
+  item_label_class: "form-checkbox form-inline",
+  item_wrapper_tag: :div,
+  item_wrapper_class: ""
 .m-2
 = f.input :options_text, as: :text,
   label: title_options_addition,
