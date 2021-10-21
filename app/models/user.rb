@@ -17,4 +17,8 @@ class User < ApplicationRecord
   def related_events
     Event.where(Event.arel_table[:user_id].eq(self.id).or(EventEntry.arel_table[:user_id].eq(self.id)))
   end
+
+  def max_events_created?
+    created_events.count >= Settings.max_count.events
+  end
 end
