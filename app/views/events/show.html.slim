@@ -46,7 +46,7 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
       tr
         th.warning colspan="4" コメント
         - @event.event_entries.each do |event_entry|
-          td = event_entry.comment
+          td.text-center = event_entry.comment
     .m-2
     / この画面はログインせずにアクセス可能
     - if user_signed_in?
