@@ -96,15 +96,15 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
                 td.warning width="30%" = option_entry.option.text
                 td
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:NG] checked = radio_options_ng )
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :NG checked = radio_options_ng )
                     i.form-icon
                     | ✕ 
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:Neither] checked = radio_options_neither )
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :Neither checked = radio_options_neither )
                     i.form-icon
                     | △ 
                   label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = OptionEntry.feelings[:OK] checked = radio_options_ok )
+                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :OK checked = radio_options_ok )
                     i.form-icon
                     | ○ 
           .form-group
