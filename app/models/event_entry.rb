@@ -14,9 +14,10 @@ class EventEntry < ApplicationRecord
   private
     def build_option_entries_from_feelings
       update_attributes = []
-      self.feelings.each do |option_entry_id, attrs|
+      feelings.each do |option_entry_id, attrs|
         option_entry_attributes = {}
-        option_entry = self.option_entries.find_by(id: option_entry_id)
+        # データがない場合があるため、findではなくfind_by
+        option_entry = option_entries.find_by(id: option_entry_id)
         if option_entry.blank?
           option_entry_attributes.merge!(id: nil, event_entry: self)
         else
