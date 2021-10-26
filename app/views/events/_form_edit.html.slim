@@ -4,28 +4,14 @@
 - ph_options_text = "例：&#13;&#10;4/1(月) 19:00〜&#13;&#10;4/2(火) 20:00〜&#13;&#10;4/3(水) 21:00〜".html_safe
 
 label.form-label #{title_options}
-= f.input :options_deletes, as: :check_boxes,
-  label: false,
-  collection: @event.options,
-  value_method: :id,
-  label_method: lambda { |option| "#{option.text}".html_safe } ,
-  input_class: nil,
-  input_html: {class: ""},
-  item_label_tag: :div ,
-  item_label_class: "form-checkbox form-inline",
-  item_wrapper_tag: :div,
-  item_wrapper_class: ""
+.form-group
+  - @event.options.each do |option|
+    = hidden_field_tag "event_options_deletes_#{option.id}", option.id
+    label.form-checkbox
+      input( type="checkbox" class="tooltip tooltip-right" data-tooltip="#{tooltip_delete_options}" value="#{option.id}" name="event[options_deletes][]" id="event_options_deletes_#{option.id}")
+      i.form-icon 
+      |  #{option.text}
 .m-2
-labe.form-label #{title_options_addition}
-= f.input :options_text, as: :text,
-  label: false,
-  required: false,
-  input_html: { class:"form-input", rows: 5, placeholder: ph_options_text },
-  item_label_class: "form-label form-inline"
-
-javascript:
-  $(function() {
-    $("label[for^=event_options_deletes]").popover({
-      trigger: "hover", placement: "right", content: "#{tooltip_delete_options}"
-    });
-  });
+.form-group
+  labe.form-label #{title_options_addition}
+  textarea.form-input( rows="5" placeholder="#{ph_options_text}" name="event[options_text]" id="event_options_text" )

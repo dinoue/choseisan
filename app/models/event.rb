@@ -46,9 +46,11 @@ class Event < ApplicationRecord
 
     def destroy_options
       if persisted?
-        unless Option.destroy(options_deletes.reject(&:blank?))
-          errors[:base] << "候補日程の削除に失敗しました"
-          return false
+        if !options_deletes.nil?
+          unless Option.destroy(options_deletes.reject(&:blank?))
+            errors[:base] << "候補日程の削除に失敗しました"
+            return false
+          end
         end
       end
     end

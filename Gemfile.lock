@@ -272,9 +272,6 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
     semantic_range (3.0.0)
-    simple_form (5.1.0)
-      actionpack (>= 5.2)
-      activemodel (>= 5.2)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -357,7 +354,6 @@ DEPENDENCIES
   ruby-debug-ide
   sass-rails (>= 6)
   selenium-webdriver
-  simple_form
   slim-rails
   spring
   turbolinks (~> 5)
@@ -370,4 +366,4 @@ RUBY VERSION
    ruby 2.7.4p191
 
 BUNDLED WITH
-   2.2.27
+   2.2.28
