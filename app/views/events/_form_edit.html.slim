@@ -1,10 +1,11 @@
-- title_options = "候補日程"
-- title_options_addition = "これらの末尾に以下の日程を追加する"
+- title_options = "候補日程の削除"
+- title_options_addition = "候補日程の追加"
 - tooltip_delete_options = "チェックするとこの候補を削除します"
 - ph_options_text = "例：&#13;&#10;4/1(月) 19:00〜&#13;&#10;4/2(火) 20:00〜&#13;&#10;4/3(水) 21:00〜".html_safe
 
+label.form-label #{title_options}
 = f.input :options_deletes, as: :check_boxes,
-  label: title_options,
+  label: false,
   collection: @event.options,
   value_method: :id,
   label_method: lambda { |option| "#{option.text}".html_safe } ,
@@ -15,8 +16,9 @@
   item_wrapper_tag: :div,
   item_wrapper_class: ""
 .m-2
+labe.form-label #{title_options_addition}
 = f.input :options_text, as: :text,
-  label: title_options_addition,
+  label: false,
   required: false,
   input_html: { class:"form-input", rows: 5, placeholder: ph_options_text },
   item_label_class: "form-label form-inline"
