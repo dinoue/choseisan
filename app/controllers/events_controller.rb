@@ -3,15 +3,13 @@ class EventsController < ApplicationController
   before_action :set_event, only: [:show]
   before_action :set_my_event, only: [:edit, :update, :destroy]
   before_action :set_event_entry, only: [:show]
-  before_action :set_option_entries_selection, only: [:show]
   before_action :check_created_events_count, only: [:new, :create]
 
   def index
-    @events = Event.filter_events(current_user).order(id: :desc).page(params[:page])
+    @events = current_user.related_events.eager_load(:event_entries).order(id: :desc).page(params[:page])
   end
 
   def show
-    @event.event_entries = @event.event_entries.eager_load(:user, option_entries: :option).order(id: :asc)
   end
 
   def new
@@ -22,16 +20,16 @@ class EventsController < ApplicationController
   end
 
   def create
-    @event = current_user.created_events.build
-    if EventService.bulk_insert(@event, event_params)
+    @event = current_user.created_events.build(event_params)
+    if @event.save
       redirect_to event_path(@event.hash_id), notice: 'イベントを作成しました。'
     else
       render :new
     end
   end
-
+  
   def update
-    if EventService.bulk_update(@event, event_params)
+    if @event.update(event_params)
       redirect_to event_path(@event.hash_id), notice: 'イベント情報を変更しました。'
     else
       render :edit
@@ -39,7 +37,7 @@ class EventsController < ApplicationController
   end
 
   def destroy
-    if EventService.bulk_delete(@event)
+    if @event.destroy
       redirect_to events_path, notice: 'イベントを削除しました。'
     else
       render :show
@@ -56,21 +54,19 @@ class EventsController < ApplicationController
     end
 
     def set_event_entry
-      @event_entry = EventEntry.find_or_initialize_by(event_id: @event, user_id: current_user) do |event_entry|
+      # ログインレスでもアクセス可能なため、current_userはnilになり得る
+      @event_entry = EventEntry.find_or_initialize_by(event: @event, user: current_user) do |event_entry|
         event_entry.attributes = { event: @event, user: current_user }
       end
-    end
-
-    def set_option_entries_selection
-      @option_entries_selection = OptionEntry.option_entries_selection(@event.options, @event_entry)
     end
 
     def event_params
       params.require(:event).permit(:title, :memo, :options_text, options_deletes: [])
     end
 
+    # insert実行も新規画面への進入も止める
     def check_created_events_count
-      if current_user.created_events.count >= Settings.max_count.events
+      if current_user.max_events_created?
         redirect_to events_path, alert: "イベントは#{Settings.max_count.events}個までしか作成できません。"
       end
     end

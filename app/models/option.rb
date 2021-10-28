@@ -9,7 +9,7 @@ class Option < ApplicationRecord
 
   def calc_option_entry
     self.answer_counts = {}
-    feeling_counts = OptionEntry.feeling_groups(self.id)
+    feeling_counts = option_entries.group(:feeling).count
     self.answer_counts[:NG] = feeling_counts['NG'] || 0
     self.answer_counts[:Neither] = feeling_counts['Neither'] || 0
     self.answer_counts[:OK] = feeling_counts['OK'] || 0

@@ -1,7 +1,7 @@
 - ph_title = "（50文字以内・必須）　今期もお疲れ様でした飲み会　打ち合わせ　など"
 - ph_memo = "（200文字以内・任意）&#13;&#10;飲み会の日程調整しましょう！&#13;&#10;出欠〆切は25日です！".html_safe
 
-= simple_form_for(@event) do |f|
+= form_with(model: @event) do |f|
   .toast
     = f.object.errors[:base].to_sentence if f.object.errors[:base].present?
   .panel
@@ -10,14 +10,15 @@
       .form-group
         = f.label :title, class: "form-label"
         = f.text_field :title, maxlength: 50, required: false, placeholder: ph_title, class: "form-input"
+      .m-2
       .form-group
         = f.label :memo, class: "form-label"
-        = f.text_field :memo, rows: "4", placeholder: ph_memo, class:"form-input"
-      .form-group
-        - if @event.new_record?
-          == render 'form_new', f: f
-        - else
-          == render 'form_edit', f: f
+        = f.text_area :memo, rows: "4", placeholder: ph_memo, class:"form-input"
+      .m-2
+      - if @event.new_record?
+        == render 'form_new', f: f
+      - else
+        == render 'form_edit', f: f
       .form-actions
         = f.submit "登録", class: "btn btn-primary"
         span &emsp;
