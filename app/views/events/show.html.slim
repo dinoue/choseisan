@@ -1,3 +1,5 @@
+= stylesheet_link_tag "events/show"
+
 - title_entry = @event.entered? ? "出欠を変更する" : "出欠を入力する"
 - event_entries = @event.event_entries.eager_load(:user, option_entries: :option).order(id: :asc)
 
@@ -12,7 +14,7 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
   .m-2
 .m-2
 .panel
-  .panel-header 日にち候補
+  .panel-header 日程候補
   .panel-body
     table.table.table-striped.table-hover
       tr.bg-warning
@@ -24,7 +26,7 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
           th.text-center = event_entry.user.name
       - @event.options.each do |option|
         - option.calc_option_entry
-        tr bgcolor="#D5EBD7"
+        tr
           td = option.text
           td.text-center = option.answer_counts[:OK]
           td.text-center = option.answer_counts[:Neither]
@@ -75,8 +77,8 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
     .panel-footer
     .m-2
 
-#attend.modal.modal-sm
-  .modal-container 
+#attend.modal
+  .modal-container
     = form_with(model: @event_entry, url: event_entry_path(@event), local: false) do |f|
       .modal-header
         button.btn.btn-clear.float-right onclick="javascript:closeModal('attend')" type="button" aira-label="閉じる"
@@ -93,20 +95,19 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
               - radio_options_ok      = option_entry.OK?      ? { checked: true } : nil
               = hidden_field_tag "event_entry[feelings][#{option_entry.id}][option_id]", option_entry.option_id
               tr
-                td.warning width="30%" = option_entry.option.text
+                td.warning = option_entry.option.text
                 td
-                  label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :NG checked = radio_options_ng )
-                    i.form-icon
-                    | ✕ 
-                  label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :Neither checked = radio_options_neither )
-                    i.form-icon
-                    | △ 
-                  label.form-radio.form-inline
-                    input(type = "radio" name = "event_entry[feelings][#{option_entry.id}][feeling]" value = :OK checked = radio_options_ok )
-                    i.form-icon
-                    | ○ 
+                  .radiobox
+                    .btn-block
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_NG" value = :NG checked = radio_options_ng )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_NG")
+                        b ✕
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_Neither" value = :Neither checked = radio_options_neither )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_Neither")
+                        b △
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_OK" value = :OK checked = radio_options_ok )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_OK")
+                        b ○
           .form-group
             = f.label :comment , class: "form-label"
             = f.text_field :comment, maxlength: 50, class: "form-input"
