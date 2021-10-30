@@ -2,7 +2,8 @@ section.section.blog-listing id="body-wrapper"
   section.container.grid-lg
     .container
       .panel
-        .panel-header ユーザー登録
+        .panel-header
+          h3 ユーザー登録
         .panel-body
           = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form-horizontal" }) do |f|
             .form-group
@@ -20,6 +21,7 @@ section.section.blog-listing id="body-wrapper"
             .form-group
               = f.label :email, class: "form-label"
               = f.email_field :email, maxlength: 100, class: "form-input"
+            .m-2
             .form-group
               = f.submit "登録", class: "btn btn-primary"
         .panel-footer

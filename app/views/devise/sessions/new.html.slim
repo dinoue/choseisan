@@ -2,7 +2,8 @@ section.section.blog-listing id="body-wrapper"
   section.container.grid-lg
     .container
       .panel
-        .panel-header ログイン
+        .panel-header
+          h3 ログイン
         .panel-body
           = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
             .form-group

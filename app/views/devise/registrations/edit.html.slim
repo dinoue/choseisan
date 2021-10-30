@@ -2,7 +2,8 @@ section.section.blog-listing id="body-wrapper"
   section.container.grid-lg
     .container
       .panel
-        .panel-header ユーザー情報編集
+        .panel-header
+          h3 ユーザー情報編集
         .panel-body
           = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, class: "form-horizontal" }) do |f|
             .form-group
