@@ -1,6 +1,6 @@
 = stylesheet_link_tag "events/show"
 
-- title_entry = @event.entered? ? "出欠を変更する" : "出欠を入力する"
+- title_entry = @event.entered? ? "回答を変更する" : "回答を入力する"
 - event_entries = @event.event_entries.eager_load(:user, option_entries: :option).order(id: :asc)
 
 h3.s-title #{@event.title}
@@ -119,7 +119,7 @@ span.label.label-success 回答数：&nbsp;##{event_entries.length}
         - if @event_entry.persisted?
           .m-2
           .btn-group
-            = link_to "出欠の削除", event_entry_path(@event), method: :delete, remote: true,
+            = link_to "回答の削除", event_entry_path(@event), method: :delete, remote: true,
               class: "btn btn-error", data: { confirm: "削除してもよろしいですか？", disable_with: "送信中..." }
 
 javascript:

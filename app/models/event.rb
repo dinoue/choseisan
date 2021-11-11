@@ -48,7 +48,7 @@ class Event < ApplicationRecord
     if persisted?
       if !options_deletes.nil?
         unless Option.destroy(options_deletes.reject(&:blank?))
-          errors[:base] << "候補日程の削除に失敗しました"
+          errors[:base] << "確認項目の削除に失敗しました"
           return false
         end
       end
@@ -63,4 +63,5 @@ class Event < ApplicationRecord
     options_text.each_line do |line|
       options.build(text: line.strip)
     end
+  end
 end

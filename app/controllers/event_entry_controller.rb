@@ -6,7 +6,7 @@ class EventEntryController < ApplicationController
     @event_entry = @event.event_entries.build(entries_params)
     @event_entry.user = current_user
     if @event_entry.save
-      flash[:notice] = "出欠を登録しました。"
+      flash[:notice] = "回答を登録しました。"
       render js: "location.reload()"
     else
       render :errors
@@ -15,7 +15,7 @@ class EventEntryController < ApplicationController
 
   def update
     if @event_entry.update(entries_params)
-      flash[:notice] = "出欠を変更しました。"
+      flash[:notice] = "回答を変更しました。"
       render js: "location.reload()"
     else
       render :errors
@@ -24,7 +24,7 @@ class EventEntryController < ApplicationController
 
   def destroy
     if @event_entry.destroy
-      flash[:notice] = "出欠を削除しました。"
+      flash[:notice] = "回答を削除しました。"
       render js: "location.reload()"
     else
       render :errors
@@ -32,15 +32,16 @@ class EventEntryController < ApplicationController
   end
 
   private
-    def set_event
-      @event = Event.find(params[:event_id])
-    end
+  
+  def set_event
+    @event = Event.find(params[:event_id])
+  end
 
-    def set_event_entry
-      @event_entry = @event.event_entries.find_by(user_id: current_user)
-    end
+  def set_event_entry
+    @event_entry = @event.event_entries.find_by(user_id: current_user)
+  end
 
-    def entries_params
-      params.require(:event_entry).permit(:comment, feelings: [:option_id, :feeling])
-    end
+  def entries_params
+    params.require(:event_entry).permit(:comment, feelings: [:option_id, :feeling])
+  end
 end

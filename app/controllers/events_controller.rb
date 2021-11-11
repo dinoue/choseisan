@@ -45,29 +45,30 @@ class EventsController < ApplicationController
   end
 
   private
-    def set_event
-      @event = Event.find_by!(hash_id: params[:id]) # ログインレスでもアクセス可能
-    end
 
-    def set_my_event
-      @event = current_user.created_events.find(params[:id])
-    end
+  def set_event
+    @event = Event.find_by!(hash_id: params[:id]) # ログインレスでもアクセス可能
+  end
 
-    def set_event_entry
-      # ログインレスでもアクセス可能なため、current_userはnilになり得る
-      @event_entry = EventEntry.find_or_initialize_by(event: @event, user: current_user) do |event_entry|
-        event_entry.attributes = { event: @event, user: current_user }
-      end
-    end
+  def set_my_event
+    @event = current_user.created_events.find(params[:id])
+  end
 
-    def event_params
-      params.require(:event).permit(:title, :memo, :options_text, options_deletes: [])
+  def set_event_entry
+    # ログインレスでもアクセス可能なため、current_userはnilになり得る
+    @event_entry = EventEntry.find_or_initialize_by(event: @event, user: current_user) do |event_entry|
+      event_entry.attributes = { event: @event, user: current_user }
     end
+  end
 
-    # insert実行も新規画面への進入も止める
-    def check_created_events_count
-      if current_user.max_events_created?
-        redirect_to events_path, alert: "イベントは#{Settings.max_count.events}個までしか作成できません。"
-      end
+  def event_params
+    params.require(:event).permit(:title, :memo, :options_text, options_deletes: [])
+  end
+
+  # insert実行も新規画面への進入も止める
+  def check_created_events_count
+    if current_user.max_events_created?
+      redirect_to events_path, alert: "イベントは#{Settings.max_count.events}個までしか作成できません。"
     end
+  end
 end
