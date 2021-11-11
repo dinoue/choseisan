@@ -13,7 +13,7 @@ ja:
       event:
         title: イベント名
         memo: メモ
-        options_text: 候補日程
+        options_text: 確認項目
       event_entry:
         comment: コメント
 

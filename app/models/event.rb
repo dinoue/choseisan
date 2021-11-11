@@ -1,7 +1,6 @@
 class Event < ApplicationRecord
   validates :title, length: { maximum: 50 }, presence: true
   validates :memo,  length: { maximum: 200 }
-  validates :options_text, presence: true, if: :new_record?
   validates :options_text, length: { maximum: 2000 }
   validate :validate_options_text
 
@@ -33,31 +32,35 @@ class Event < ApplicationRecord
   end
 
   private
-    def validate_options_text
-      if options_text.split(/\n/).select(&:blank?).present?
-        errors.add(:options_text, "の各行を入力してください。")
-        return false
-      end
-    end
 
-    def generate_hash_id
-      self.hash_id = SecureRandom.hex
+  def validate_options_text
+    if options_text.split(/\n/).select(&:blank?).present?
+      errors.add(:options_text, "の各行を入力してください。")
+      return false
     end
+  end
 
-    def destroy_options
-      if persisted?
-        if !options_deletes.nil?
-          unless Option.destroy(options_deletes.reject(&:blank?))
-            errors[:base] << "候補日程の削除に失敗しました"
-            return false
-          end
+  def generate_hash_id
+    self.hash_id = SecureRandom.hex
+  end
+
+  def destroy_options
+    if persisted?
+      if !options_deletes.nil?
+        unless Option.destroy(options_deletes.reject(&:blank?))
+          errors[:base] << "候補日程の削除に失敗しました"
+          return false
         end
       end
     end
+  end
 
-    def build_options_from_options_text
-      options_text.each_line do |line|
-        options.build(text: line.strip)
-      end
+  def build_options_from_options_text
+    if !options.exists?
+      options.build(text: "出欠")
+    end
+
+    options_text.each_line do |line|
+      options.build(text: line.strip)
     end
 end

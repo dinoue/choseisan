@@ -1,5 +1,11 @@
-- ph_options_text = "（必須）&#13;&#10;候補日程／日時などを入力してください。候補の区切りは改行で判断されます。&#13;&#10;例：&#13;&#10;4/1(月) 19:00〜&#13;&#10;4/2(火) 20:00〜&#13;&#10;4/3(水) 21:00〜".html_safe
+- ph_options_text = "追加日程への参加やレンタル物品の希望など、確認項目を追加できます。項目の区切りは改行で判断されます。&#13;&#10;例：&#13;&#10;19:00〜の延長も参加&#13;&#10;グローブのレンタル希望".html_safe
 
 = f.label :options_text, class: "form-label"
 .m-2
-= f.text_area :options_text, required: false, placeholder: ph_options_text, rows: "8", class: "form-input textarea"
+details.accordion
+  summary.accordion-header
+    i.icon.icon-arrow-right.mr-1
+    | 出欠以外の確認項目を追加する
+  .accordion-body
+    = f.text_area :options_text, required: false, placeholder: ph_options_text, rows: "8", class: "form-input textarea"
+.m-2
