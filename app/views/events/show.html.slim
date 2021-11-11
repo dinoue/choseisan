@@ -1,96 +1,93 @@
 = stylesheet_link_tag "events/show"
-= javascript_include_tag "events/show"
 
 - title_entry = @event.entered? ? "出欠を変更する" : "出欠を入力する"
 - event_entries = @event.event_entries.eager_load(:user, option_entries: :option).order(id: :asc)
 
-.page-header
-  h3 = @event.title
-  span.label.label-primary 作成者：&nbsp;#{@event.owner.name}
-  span &emsp;
-  span.label.label-success 回答数：&nbsp;#{event_entries.length}
-.row
-  - if user_signed_in? && current_user.tags.present?
-    p.text-right data-toggle="buttons"
-      - current_user.tags.each do |tag|
-        - label_class = "label-" << color_alias(tag.color)
-        - btn_active = (@event.taggings.find_by(tag: tag)) ? "active" : ""
-        = link_to tagging_event_path(tag_id: tag.id),
-          { method: :patch, remote: true, id: "tag-#{tag.id}", class: "btn btn-default btn-nonfocus #{btn_active}" } do
-          span.label.glyphicon.glyphicon-tag class="#{label_class}" &thinsp;#{tag.label}&thinsp;
-  .panel.panel-success
-    .panel-heading メモ
-    .panel-body = simple_format h @event.memo
-  .panel.panel-success
-    .panel-heading 日にち候補
-    .panel-body
-      table.table.table-bordered.table-hover
-        tr.warning
-          th.text-center width="15%" 日程
-          th.text-center width="5%" ◯
-          th.text-center width="5%" △
-          th.text-center width="5%" Ｘ
-          - event_entries.each do |event_entry|
-            th.text-center = event_entry.user.name
-        - @event.options.each do |option|
-          - option.calc_option_entry
-          - if option.rate == 100
-            - line_color = "#68D973"
-          - elsif option.rate >= 70
-            - line_color = "#D5EBD7"
-          - else
-            - line_color = "#ffffff"
-          tr bgcolor="#{line_color}"
-            td = option.text
-            td.text-center = option.count_ok
-            td.text-center = option.count_neither
-            td.text-center = option.count_ng
-            - event_entries.each do |event_entry|
-              - option_entry = nil
-              - event_entry.option_entries.each do |target_option_entry|
-                - option_entry = target_option_entry if target_option_entry.option == option
-              - if option_entry.nil?
-                td
-              - else
-                td.text-center style="font-size: 1.5em;"
-                  - if option_entry.NG?
-                    .label.label-danger &nbsp; Ｘ &nbsp;
-                  - elsif option_entry.Neither?
-                    .label.label-warning &nbsp; △ &nbsp;
-                  - elsif option_entry.OK?
-                    .label.label-success &nbsp; ◯ &nbsp;
+h3.s-title #{@event.title}
+span.label.label-primary 作成者：&nbsp;#{@event.owner.name}
+span &emsp;
+span.label.label-success 回答数：&nbsp;##{event_entries.length}
+.m-2
+.panel
+  .panel-header メモ
+  .panel-body #{@event.memo}
+  .m-2
+.m-2
+.panel
+  .panel-header 日程候補
+  .panel-body
+    table.table.table-striped.table-hover
+      tr.bg-warning
+        th.text-center width="15%" 日程
+        th.text-center width="5%" ○
+        th.text-center width="5%" △
+        th.text-center width="5%" ✕
+        - @event.event_entries.each do |event_entry|
+          th.text-center = event_entry.user.name
+      - @event.options.each do |option|
+        - option.calc_option_entry
         tr
-          th.warning colspan="4" コメント
-          - event_entries.each do |event_entry|
-            td = event_entry.comment
-      / この画面はログインせずにアクセス可能
-      - if user_signed_in?
-        = link_to title_entry, "#modal-area", data: { toggle: "modal" }, class: "btn btn-primary btn-lg"
-      - else
-        = link_to title_entry, event_entry_path(@event), method: :post, class: "btn btn-primary btn-lg"
-  .panel.panel-success
-    .panel-heading このイベントのURL
-    .panel-body = text_field_tag "event-url", "#{request.url}", readonly: true, onclick: "this.select();", class: "form-control"
-  - if @event.owner?
-    .panel.panel-success
-      .panel-heading イベント情報の変更
-      .panel-body
-        = link_to "イベントの再編集", edit_event_path(@event), class: "btn btn-success btn-lg"
-        span &emsp;
-        = link_to "イベントを削除する", event_path(@event), method: :delete,
-          data: { confirm: "削除してもよろしいですか？", toggle: "popover", trigger: "hover", placement: "top", title: "注意！", content: "一度削除すると復旧はできません。" },
-          id: "btn-event-delete", class: "btn btn-danger btn-lg"
+          td = option.text
+          td.text-center = option.answer_counts[:OK]
+          td.text-center = option.answer_counts[:Neither]
+          td.text-center = option.answer_counts[:NG]
+          - @event.event_entries.each do |event_entry|
+            - option_entry = nil
+            - event_entry.option_entries.each do |target_option_entry|
+              - option_entry = target_option_entry if target_option_entry.option == option
+            - if option_entry.nil?
+              td
+            - else
+              td.text-center style="font-size: 1.5em; font-style: bold"
+                - if option_entry.NG?
+                  .label.label-danger &nbsp; ✕ &nbsp;
+                - elsif option_entry.Neither?
+                  .label.label-warning &nbsp; △ &nbsp;
+                - elsif option_entry.OK?
+                  .label.label-success &nbsp; ○ &nbsp;
+      tr
+        th.warning colspan="4" コメント
+        - @event.event_entries.each do |event_entry|
+          td.text-center = event_entry.comment
+    .m-2
+    / この画面はログインせずにアクセス可能
+    - if user_signed_in?
+      button.btn.btn-primary onclick="javascript:openModal('attend')" type="button"
+        | #{title_entry}
+    - else
+      = button_to title_entry, event_entry_path(@event), { method: :post , class: "btn btn-primary input-group-btn"}
+    .m-2
+.m-2
+.panel
+  .panel-header このイベントのURL
+  .panel-body
+    = text_field_tag "event-url", "#{request.url}", readonly: true, onclick: "this.select();", class: "form-input disabled"
+  .panel-footer
+  .m-2
+- if @event.owner?
+  .m-2
+  .panel
+    .panel-header イベント情報の変更
+    .panel-body
+      = link_to "イベントの編集", edit_event_path(@event), class: "btn btn-success"
+      span &emsp;
+      = link_to "イベントの削除", event_path(@event), method: :delete,
+        data: { confirm: "削除してもよろしいですか？", toggle: "popover", trigger: "hover", placement: "top", title: "注意！", content: "一度削除すると復旧はできません。" },
+        id: "btn-event-delete", class: "btn btn-error"
+    .panel-footer
+    .m-2
 
-#modal-area.modal.fade
-  .modal-dialog
-    .modal-content
+#attend.modal
+  .modal-container
+    = form_with(model: @event_entry, url: event_entry_path(@event), local: false) do |f|
       .modal-header
-        button.close data-dismiss="modal" &times;
-        h4.modal-title #{title_entry}
-      = simple_form_for(@event_entry, url: event_entry_path(@event), remote: true) do |f|
-        .modal-body
+        button.btn.btn-clear.float-right onclick="javascript:closeModal('attend')" type="button" aira-label="閉じる"
+        .modal-title.h5
+          | #{title_entry}
+      .modal-body
+        .content
           #modal-dialog-errors
-          p 日にち候補
+          label.form-label 日にち候補
           table.table.table-bordered.table-striped
             - @event.option_entries_selection(@event_entry).each do |option_entry|
               - radio_options_ng      = option_entry.NG?      ? { checked: true } : nil
@@ -98,24 +95,38 @@
               - radio_options_ok      = option_entry.OK?      ? { checked: true } : nil
               = hidden_field_tag "event_entry[feelings][#{option_entry.id}][option_id]", option_entry.option_id
               tr
-                td.warning width="30%" = option_entry.option.text
+                td.warning = option_entry.option.text
                 td
-                  .btn-group data-toggle="buttons"
-                    label.btn.btn-lg.btn-default
-                      = radio_button_tag "event_entry[feelings][#{option_entry.id}][feeling]", :NG, radio_options_ng
-                      span 　Ｘ　
-                    label.btn.btn-lg.btn-default
-                      = radio_button_tag "event_entry[feelings][#{option_entry.id}][feeling]", :Neither, radio_options_neither
-                      span 　△　
-                    label.btn.btn-lg.btn-default
-                      = radio_button_tag "event_entry[feelings][#{option_entry.id}][feeling]", :OK, radio_options_ok
-                      span 　◯　
+                  .radiobox
+                    .btn-block
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_NG" value = :NG checked = radio_options_ng )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_NG")
+                        b ✕
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_Neither" value = :Neither checked = radio_options_neither )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_Neither")
+                        b △
+                      input(type = "radio" class="radiobutton" name = "event_entry[feelings][#{option_entry.id}][feeling]" id = "event_entry_feelings_#{option_entry.id}_feeling_OK" value = :OK checked = radio_options_ok )
+                      label.button(for = "event_entry_feelings_#{option_entry.id}_feeling_OK")
+                        b ○
           .form-group
-            = f.input :comment, maxlength: 50, class: "form-control"
-        .modal-footer
-          = f.button :submit, "保存", class: "btn btn-primary", data: { disable_with: "送信中..." }
-          button.btn.btn-default data-dismiss="modal" キャンセル
-          - if @event_entry.persisted?
-            span  &emsp;|&emsp;
+            = f.label :comment , class: "form-label"
+            = f.text_field :comment, maxlength: 50, class: "form-input"
+      .modal-footer
+        .btn-group
+          = f.submit "保存", class: "btn btn-primary", data: { disable_with: "送信中..." }
+          button.btn.btn-secondary onclick="javascript:closeModal('attend')" type="button"
+            | キャンセル
+        - if @event_entry.persisted?
+          .m-2
+          .btn-group
             = link_to "出欠の削除", event_entry_path(@event), method: :delete, remote: true,
-              class: "btn btn-danger", data: { confirm: "削除してもよろしいですか？", disable_with: "送信中..." }
+              class: "btn btn-error", data: { confirm: "削除してもよろしいですか？", disable_with: "送信中..." }
+
+javascript:
+    function openModal(id) {
+      document.getElementById(id).classList.add("active")
+    }
+    function closeModal(id) {
+      console.log(id);
+      document.getElementById(id).classList.remove("active")
+    }

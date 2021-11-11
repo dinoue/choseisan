@@ -1,14 +1,12 @@
 class EventsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:show]
-  before_action :set_event, only: [:show, :tagging]
+  before_action :set_event, only: [:show]
   before_action :set_my_event, only: [:edit, :update, :destroy]
   before_action :set_event_entry, only: [:show]
-  before_action :set_tag, only: [:tagging]
-  before_action :set_tagging, only: [:tagging]
   before_action :check_created_events_count, only: [:new, :create]
 
   def index
-    @events = current_user.related_events.filter_tags(params[:tag_ids]).distinct.order(id: :desc).page(params[:page])
+    @events = current_user.related_events.eager_load(:event_entries).order(id: :desc).page(params[:page])
   end
 
   def show
@@ -29,7 +27,7 @@ class EventsController < ApplicationController
       render :new
     end
   end
-
+  
   def update
     if @event.update(event_params)
       redirect_to event_path(@event.hash_id), notice: 'イベント情報を変更しました。'
@@ -46,17 +44,9 @@ class EventsController < ApplicationController
     end
   end
 
-  def tagging
-    if @tagging
-      @tagging.destroy
-    else
-      @tagging = Tagging.create(event: @event, tag: @tag)
-    end
-  end
-
   private
     def set_event
-      @event = Event.find_by!(hash_id: params[:id])
+      @event = Event.find_by!(hash_id: params[:id]) # ログインレスでもアクセス可能
     end
 
     def set_my_event
@@ -68,14 +58,6 @@ class EventsController < ApplicationController
       @event_entry = EventEntry.find_or_initialize_by(event: @event, user: current_user) do |event_entry|
         event_entry.attributes = { event: @event, user: current_user }
       end
-    end
-
-    def set_tag
-      @tag = Tag.find(params[:tag_id])
-    end
-
-    def set_tagging
-      @tagging = @event.taggings.find_by(tag: @tag)
     end
 
     def event_params

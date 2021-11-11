@@ -1,4 +1,4 @@
-class EventEntry < ActiveRecord::Base
+class EventEntry < ApplicationRecord
   validates :comment, length: { maximum: 50 }
 
   before_save :build_option_entries_from_feelings

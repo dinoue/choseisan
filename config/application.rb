@@ -1,23 +1,36 @@
-require File.expand_path('../boot', __FILE__)
+require_relative "boot"
 
-require "rails"
-require "active_model/railtie"
-require "active_job/railtie"
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "action_view/railtie"
-require "sprockets/railtie"
+require "rails/all"
 
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Coordination
+module Mycho
   class Application < Rails::Application
-    config.time_zone = 'Tokyo'
+    # Initialize configuration defaults for originally generated Rails version.
+    config.load_defaults 6.1
+
+    # Configuration for the application, engines, and railties goes here.
+    #
+    # These settings can be overridden in specific environments using the files
+    # in config/environments, which are processed later.
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
+
+    # アプリケーションが対応している言語のホワイトリスト
+    config.i18n.available_locales = %i[ja en]
+
+    # デフォルトの言語設定
     config.i18n.default_locale = :ja
-    config.active_record.raise_in_transactional_callbacks = true
-    config.quiet_assets = true
+
+    # 言語ファイル階層ごとに設定するための記述
+    config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
+
+    # Please use `Rails.root.join('path/to')` instead.と言われたら、下記のようにする。
+    config.i18n.load_path += Dir[Rails.root.join('config/locales/**/*.{rb,yml}').to_s]
+
     config.autoload_paths += %W( #{config.root}/app/services )
   end
 end
-

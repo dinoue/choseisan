@@ -1,16 +1,17 @@
-= javascript_include_tag "events/_form_edit"
-
+- title_options = "候補日程の削除"
+- title_options_addition = "候補日程の追加"
+- tooltip_delete_options = "チェックするとこの候補を削除します"
 - ph_options_text = "例：&#13;&#10;4/1(月) 19:00〜&#13;&#10;4/2(火) 20:00〜&#13;&#10;4/3(水) 21:00〜".html_safe
 
-= f.input :options_deletes, as: :check_boxes,
-  label: "候補日程",
-  collection: @event.options,
-  value_method: :id,
-  label_method: :text
-div style="padding-left: 1em;"
-  = f.input :options_text, as: :text,
-    label: "これらの末尾に以下の日程を追加する",
-    required: false,
-    label_html: { style: "font-weight: normal; font-size: 90%;" },
-    input_html: { rows: 5, placeholder: ph_options_text }
-
+label.form-label #{title_options}
+.form-group
+  - @event.options.each do |option|
+    = hidden_field_tag "event_options_deletes_#{option.id}", option.id
+    label.form-checkbox
+      input( type="checkbox" class="tooltip tooltip-right" data-tooltip="#{tooltip_delete_options}" value="#{option.id}" name="event[options_deletes][]" id="event_options_deletes_#{option.id}")
+      i.form-icon 
+      |  #{option.text}
+.m-2
+.form-group
+  labe.form-label #{title_options_addition}
+  textarea.form-input( rows="5" placeholder="#{ph_options_text}" name="event[options_text]" id="event_options_text" )

@@ -1,7 +1,6 @@
-| messages = $("<div></div>").addClass("alert").addClass("alert-danger");
-| messages.append("<ul></ul>");
+| messages = $("<div></div>").addClass("toast").addClass("toast-error");
 - @event_entry.errors.full_messages.each do |message|
-  | line = $("<li></li>").text("#{message}");
+  | line = $("<p></p>").text("#{message}");
   | messages.append(line);
 | $("#modal-dialog-errors").html(messages);
 

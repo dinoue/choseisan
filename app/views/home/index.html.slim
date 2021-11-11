@@ -1,7 +1,12 @@
-h1 俺の調整さん
+.hero.hero-sm.bg-primary
+  .hero-body
+  section.container style="text-align: center"
+    h1 参確さん
 p = image_tag "/images/top.png", width: "800"
 .container style="padding: 50px;"
-  = link_to "ログイン", new_user_session_path, class: "btn btn-primary btn-lg btn-block"
-  br
-  = link_to "サインアップ", new_user_registration_path, class: "btn btn-info btn-lg btn-block"
+  .columns 
+    .column.col-12
+      = link_to "ログイン", new_user_session_path, class: "btn btn-primary btn-lg btn-block"
+      br
+      = link_to "サインアップ", new_user_registration_path, class: "btn btn-info btn-lg btn-block"
 

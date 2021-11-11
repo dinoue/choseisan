@@ -1,10 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
-  root to: 'home#index'
   get 'top', to: 'home#top', as: :top
   resources :events do
     resource :entry, controller: :event_entry, only: [:create, :update, :destroy]
-    patch 'tagging', on: :member
   end
-  resources :tags, except: [:show]
+  devise_for :views
+  devise_for :users
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  root 'home#index'
 end

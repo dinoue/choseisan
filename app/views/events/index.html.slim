@@ -1,37 +1,25 @@
-= javascript_include_tag "events/index"
-
-.page-header
-  h3 = link_to "イベント一覧", events_path, style: "text-decoration: none;"
-.row
-  .col-md-8
-    - if current_user.tags.present?
-      .well
-        - current_user.tags.each do |tag|
-          - tag_ids = (params[:tag_ids] || []).map(&:to_i)
-          - btn_active = (tag_ids.include?(tag.id)) ? "active" : ""
-          - pop_message = (btn_active.blank?) ? "#{tag.label}でフィルターします" : "#{tag.label}のフィルターを外します"
-          - label_class = "label-" << color_alias(tag.color)
-          - if tag_ids.include?(tag.id)
-            - tag_ids.delete(tag.id)
-          - else
-            - tag_ids << tag.id
-          = link_to events_path(tag_ids: tag_ids),
-            id: "tag-#{tag.id}", class: "btn btn-default #{btn_active}",
-            data: { toggle: "popover", trigger: "hover", placement: "top", content: pop_message } do
-            span.label.glyphicon.glyphicon-tag class="#{label_class}" &thinsp;#{tag.label}&thinsp;
-    .list-group
-      - @events.each do |event|
-        = link_to event_path(event.hash_id), class: "list-group-item"
-          h4.list-group-item-heading = event.title
-          p.list-group-item-text = event.memo.truncate(43)
-          .text-right
-            - event.tags.where(user: current_user).each do |tag|
-              - label_class = "label-" << color_alias(tag.color)
-              span.label.glyphicon.glyphicon-tag class="#{label_class}" &thinsp;#{tag.label}
-      = paginate(@events)
-  .col-md-4
+h3.s-title イベント一覧
+.m-2
+.columns
+  .column.col-12
+    - @events.each do |event|
+        .tile.bg-secondary
+          .tile-icon
+            i.icon.icon-2x.bg-primary.icon-time
+          .tile-content
+            h5.tile-title
+              = link_to event.title, event_path(event.hash_id)
+            p.tile-subtitle
+              = event.memo.truncate(43)
+        .m-2
+    = paginate @events
+.columns 
+  .column.col-12
     - if current_user.created_events.count < Settings.max_count.events
-      = link_to "出欠表をつくる", new_event_path,
-        id: "btn-event-create", class: "btn btn-primary btn-lg btn-block",
+      = link_to "イベントを登録する", new_event_path, id: "btn-event-create", class: "btn btn-primary btn-lg btn-block",
         data: { toggle: "popover", trigger: "hover", placement: "top", content: "最大#{Settings.max_count.events}個まで" }
 
+javascript:
+    function() {
+      return $("#btn-event-create").popover();
+    }
