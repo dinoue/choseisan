@@ -56,9 +56,7 @@ class Event < ApplicationRecord
   end
 
   def build_options_from_options_text
-    if !options.exists?
-      options.build(text: "出欠")
-    end
+    options.build(text: "出欠") if !options.exists?
 
     options_text.each_line do |line|
       options.build(text: line.strip)
