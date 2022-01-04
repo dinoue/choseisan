@@ -1,5 +1,6 @@
 class EventEntry < ApplicationRecord
   validates :comment, length: { maximum: 50 }
+  validates :attendername, length: {maximum: 20}
 
   before_save :build_option_entries_from_feelings
 
